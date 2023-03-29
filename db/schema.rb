@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_29_190221) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_29_195356) do
   create_table "books", force: :cascade do |t|
     t.string "title"
     t.string "img"
     t.string "bookLink"
     t.text "description"
-    t.integer "author_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["author_id"], name: "index_books_on_author_id"
+    t.index ["user_id"], name: "index_books_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -48,7 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_190221) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "books", "authors"
+  add_foreign_key "books", "users"
   add_foreign_key "comments", "books"
   add_foreign_key "comments", "users"
   add_foreign_key "ratings", "books"
