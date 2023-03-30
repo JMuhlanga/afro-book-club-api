@@ -3,14 +3,16 @@ class BooksController < ApplicationController
     before_action :set_book, only: [:show, :update, :destroy]
   
     def index
-        books = Book.all 
-        render json: books
+      books = Book.includes(:comments)
+      render json: books.as_json(include: { comments: { include: { user: { only: [:username] } } } })
     end
+    
   
     def show
-        book = Book.includes(:user).find_by(id: params[:id])
-        render json: book.as_json(include: { user: { only: [:username] } })
+      book = Book.includes(:comments, :user).find(params[:id])
+      render json: book.as_json(include: { comments: { include: { user: { only: [:username] } } }, user: { only: [:username] } })
     end
+    
   
     def create
       book = Book.create(book_params)

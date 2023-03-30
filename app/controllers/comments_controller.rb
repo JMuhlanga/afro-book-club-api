@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-    # before_action :authorize, only: [:create, :destroy]
+    
     before_action :set_comment, only: [:show, :destroy]
   
     def index
@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   
     def create
       comment = Comment.create(comment_params)
-  
+    
       if comment.save
         render json: comment, status: :created, location: comment
       else
@@ -39,8 +39,8 @@ class CommentsController < ApplicationController
       end
   
       def comment_params
-        params.require(:comment).permit(:content, :book_id, :user_Id)tap do |whitelisted|
-        whitelisted[:user_id] = params[:user_Id]
+        params.require(:comment).permit(:content, :book_id, :user_id)
       end
+      
   end
   
