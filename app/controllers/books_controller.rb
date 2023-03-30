@@ -8,12 +8,12 @@ class BooksController < ApplicationController
     end
   
     def show
-        book = Book.find_by(id: params[:id])
-        render json: book
+        book = Book.includes(:user).find_by(id: params[:id])
+        render json: book.as_json(include: { user: { only: [:username] } })
     end
   
     def create
-      @book = current_user.books.build(book_params)
+      book = current_user.books.build(book_params)
   
       if book.save
         render json: book, status: :created, location: book

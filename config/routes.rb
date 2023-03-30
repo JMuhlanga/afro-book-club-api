@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   resources :ratings
   resources :comments
 
-  
-
   resources :users, only: [:index, :show, :create] do
     resources :books, only: [:index, :show], controller: 'users/books'
   end
@@ -37,6 +35,10 @@ Rails.application.routes.draw do
 
      # Define the sign-in route
     get '/users/sign_in', to: 'sessions#new', as: 'new_user_session'
+
+    # Session routes
+    post '/login', to: 'sessions#create'
+    delete '/logout', to: 'sessions#destroy'
 
     resources :books
 
