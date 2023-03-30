@@ -1,15 +1,16 @@
 class UsersController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:create, :login]
-    
+    skip_before_action :authenticate_user!, only: [:create, :login, :index, :show]
+
     # Show all
     def index
-        render json: User.all
+        users = User.includes(:books).select(:id, :username, :email)
+        render json: users.as_json(include: { books: { only: [:id, :title, :img, :bookLink, :description] } })
     end
 
     # Show individual User
     def show
-        user = User.find_by()
-        render json: @current_user
+        user = User.includes(:books).find(params[:id])
+        render json: user.as_json(include: { books: { only: [:id, :title, :img, :bookLink, :description] } }, only: [:id, :username, :email])
     end
 
     # Create User
