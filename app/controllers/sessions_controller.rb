@@ -1,7 +1,7 @@
-class SessionsController < ApplicationController
-    skip_before_action :authorize, only: [:create]
+class SessionsController < ActionController::Base
+  before_action :authorize, except: [:create]
   
-    # Log in
+   
     # Log in
     def create
         user = User.find_by(email: params[:email])
