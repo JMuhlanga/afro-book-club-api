@@ -27,22 +27,23 @@ class BooksController < ApplicationController
     
   
     def update
-      if @book.update(book_params)
-        render json: @book
+      book = Book.update(book_params)
+      if book.persisted?
+        render json: book
       else
-        render json: @book.errors, status: :unprocessable_entity
+        render json: book.errors, status: :unprocessable_entity
       end
     end
     
     def destroy
-      @book.destroy
+      book.destroy
     end
     
   
     private
 
     def set_book
-      @book = current_user.books.find(params[:id])
+      book = Book.find(params[:id])
     end      
   
     def book_params
