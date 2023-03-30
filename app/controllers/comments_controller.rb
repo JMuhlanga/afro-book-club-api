@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-    before_action :authenticate_user!, only: [:create, :destroy]
+    before_action :authorize, only: [:create, :destroy]
     before_action :set_comment, only: [:show, :update, :destroy]
   
     def index

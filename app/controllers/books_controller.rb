@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-    before_action :authenticate_user!, only: [:create, :destroy, :update]
+    # before_action :authorize, only: [:create, :destroy, :update]
     before_action :set_book, only: [:show, :update, :destroy]
   
     def index
@@ -13,34 +13,43 @@ class BooksController < ApplicationController
     end
   
     def create
-      book = current_user.books.build(book_params)
-  
-      if book.save
+      book = Book.create(book_params)
+     
+      if book.persisted?
         render json: book, status: :created, location: book
       else
         render json: book.errors, status: :unprocessable_entity
       end
     end
+    
+    
+    
+    
   
     def update
-      if book.update(book_params)
-        render json: book
+      if @book.update(book_params)
+        render json: @book
       else
-        render json: book.errors, status: :unprocessable_entity
+        render json: @book.errors, status: :unprocessable_entity
       end
     end
-  
+    
     def destroy
-        book.destroy
+      @book.destroy
     end
+    
   
     private
-      def set_book
-        book = Book.find(params[:id])
-      end
+
+    def set_book
+      @book = current_user.books.find(params[:id])
+    end      
   
-      def book_params
-        params.require(:book).permit(:title, :img, :bookLink, :description, :user_id)
+    def book_params
+      params.require(:book).permit(:title, :img, :bookLink, :description, :user_Id).tap do |whitelisted|
+        whitelisted[:user_id] = params[:user_Id]
       end
+    end
+    
 end
   

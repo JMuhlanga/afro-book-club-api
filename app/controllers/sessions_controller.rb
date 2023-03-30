@@ -1,20 +1,24 @@
 class SessionsController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:create]
-
-  # Log in
+    skip_before_action :authorize, only: [:create]
+  
+    # Log in
+    # Log in
     def create
         user = User.find_by(email: params[:email])
         if user && user.authenticate(params[:password])
-            session[:user_id] = user.id
-            render json: user
+          cookies.signed[:user_id] = user.id
+          puts "User session created with user_id #{user.id}"
+          render json: { user_id: user.id, name: user.username}
         else
-            render json: { error: 'Invalid email or password' }, status: :unprocessable_entity
+          render json: { error: 'Invalid email or password' }, status: :unprocessable_entity
         end
     end
-
+  
+  
     # Log out
     def destroy
-        session[:user_id] = nil
-        render json: { message: 'Successfully logged out.' }
+      cookies.delete(:user_id)
+      render json: { message: 'Successfully logged out.' }
     end
 end
+  

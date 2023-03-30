@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:create, :login, :index, :show]
+    skip_before_action :authorize, only: [:create, :login, :index, :show]
 
     # Show all
     def index
@@ -36,8 +36,13 @@ class UsersController < ApplicationController
 
     private
 
+    private
+
     def user_params
-        params.permit(:username, :email, :password, :password_confirmation)
+        params.permit(:username, :email, :password, :password_confirmation, :repeatPassword)
     end
+
+      
+      
 
 end

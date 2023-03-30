@@ -1,5 +1,5 @@
 class RatingsController < ApplicationController
-    before_action :authenticate_user
+    before_action :authorize
   
     # GET /books/:book_id/ratings
     def index
